@@ -14,7 +14,7 @@ class Worker:
     def __init__(self, name):
         self.name = name + 1
 
-    def is_ready(self):
+    def is_ready_to_work(self):
         return self.working_on is None
 
     def start_work(self, task):
@@ -120,24 +120,27 @@ def part_2(steps):
 
     workers = [Worker(i) for i in range(5)]
 
-    def get_free_worker():
-        for worker in workers:
-            if worker.is_ready():
-                return worker
     ans = ''
     time = 0
-    while not all([i[1].finished for i in steps]):
-        # Loop through the steps and assign a worker to it if the step
-        # is ready to be worked on, and the worker is available
+
+    def get_available_step():
         for step in steps:
-            worker = get_free_worker()
-            if worker is not None and step[1].is_ready():
+            if step[1].is_ready() and not step[1].finished:
+                return step
+
+    while not all([i[1].finished for i in steps]):
+        # Loop though the workers checking if they are available
+        # and assign them a step if it's ready to be worked on
+        for w in workers:
+            step = get_available_step()
+            if step is not None and w.is_ready_to_work():
                 if step[1].is_ready() and not step[1].finished:
                     # print(f'Worker {worker.name}: Started {step[0]} at {time} ')
-                    worker.start_work(step[0])
+                    w.start_work(step[0])
                     step[1].is_being_worked_on = True
-                    continue
 
+        # For each worker, process one step of working
+        # checking if any of the workers have become free again
         for w in workers:
             completed = w.working()
             if completed:
