@@ -30,9 +30,10 @@ def find_hundreds(power_level):
 def find_submatrix(grid, subgrid_len):
     i = 0
     j = 0
-    solutions = blist()
+    biggest = 0
+    biggest_idx = 0
+
     while i < len(grid) - subgrid_len:
-        sol = blist()
         j = 0
         while j < len(grid) - subgrid_len:
             submatrix = [
@@ -40,20 +41,12 @@ def find_submatrix(grid, subgrid_len):
                 for y in range(subgrid_len)
                 for x in range(subgrid_len)
             ]
-            sol.append(sum(submatrix))
+            total_power = sum(submatrix)
+            if biggest < total_power:
+                biggest = total_power
+                biggest_idx = (j+1, i+1)
             j += 1
-        solutions.append(sol)
         i += 1
-
-    # All the sums are there, now find the biggest one along with it's idx
-    biggest = 0
-    biggest_idx = 0
-    for idx, a in enumerate(solutions):
-        for idx2, b in enumerate(a):
-            if biggest < b:
-                biggest = b
-                biggest_idx = (idx2+1, idx+1)
-
     print(biggest, biggest_idx, subgrid_len)
 
 
