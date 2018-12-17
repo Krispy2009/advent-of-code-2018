@@ -80,12 +80,15 @@ recipes = Recipes()
 recipes.add_to_end(Recipe(3))
 recipes.add_to_end(Recipe(7))
 
-elves = [Elf(recipes[0]), Elf(recipes[1])]
-
-while len(recipes) < NUM_RECIPES+10:
+elf1 = Elf(recipes[0])
+elf2 = Elf(recipes[1])
+elves = [elf1, elf2]
+# while len(recipes) < NUM_RECIPES+10:
+while True:
     new_recipe = 0
-    for elf in elves:
-        new_recipe += elf.recipe.score
+
+    new_recipe += elf1.recipe.score
+    new_recipe += elf2.recipe.score
 
     new_recipe = list(str(new_recipe))
 
@@ -97,8 +100,22 @@ while len(recipes) < NUM_RECIPES+10:
         elf.recipe = recipes[new_idx]
         elf.index = elf.recipe.index
 
+    # Part 1
+    if len(recipes) == NUM_RECIPES+10:
+        last_10 = recipes[NUM_RECIPES:NUM_RECIPES+11]
+        print(''.join([str(l) for l in last_10]))
 
+    # Part 2
+    last_6 = recipes[len(recipes)-6:]
+    last_6 = [r.score for r in last_6]
+    last_7 = recipes[len(recipes)-7:len(recipes)-1]
+    last_7 = [r.score for r in last_7]
+    match = [3, 8, 0, 6, 2, 1]
 
-print('==========')
-last_10 = recipes[NUM_RECIPES:NUM_RECIPES+10]
-print(''.join(str(l) for l in last_10))
+    if last_6 == match:
+        print(len(recipes)-6)
+        break
+    elif last_7 == match:
+        print(len(recipes)-7)
+        break
+
